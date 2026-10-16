@@ -33,7 +33,7 @@ jobs:
       - name: Estrai il sito dallo ZIP
         run: |
           mkdir -p public
-          unzip -o "NO CISTI Wrapped (1).zip" -d public
+          unzip -o "NO CISTI Wrapped.zip" -d public
           test -f public/index.html
 
       - name: Carica i file del sito
