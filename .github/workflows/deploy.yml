@@ -1,0 +1,46 @@
+name: Pubblica NO CISTI Wrapped
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Scarica i file del repository
+        uses: actions/checkout@v6
+
+      - name: Prepara GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Estrai il sito dallo ZIP
+        run: |
+          mkdir -p public
+          unzip -o "NO CISTI Wrapped (1).zip" -d public
+          test -f public/index.html
+
+      - name: Carica i file del sito
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: public
+
+      - name: Pubblica il sito
+        id: deployment
+        uses: actions/deploy-pages@v4
